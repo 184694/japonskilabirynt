@@ -9,8 +9,6 @@ namespace JaponskiLabirynt
 
     internal class labirynt
     {
-         
-        public int WYSOKOSC, SZEROKOSC;
 
         [Flags]
         public enum KIERUNEK
@@ -21,17 +19,17 @@ namespace JaponskiLabirynt
             W = 1 << 3,
             E = 1 << 4
         }
-    
 
+        public int WYSOKOSC, SZEROKOSC;
+        public KIERUNEK[,] GRID;
+    
         public labirynt(int WYSOKOSC, int SZEROKOSC)
         {
             this.WYSOKOSC = WYSOKOSC;
             this.SZEROKOSC = SZEROKOSC;
-            
-            KIERUNEK[,] GRID = new KIERUNEK[WYSOKOSC,SZEROKOSC];
+   
+            GRID = new KIERUNEK[WYSOKOSC,SZEROKOSC];
             wypelnianie(GRID);
-            kret(GRID);
-
         }
         
         private void wypelnianie(KIERUNEK[,] GRID)
@@ -45,15 +43,28 @@ namespace JaponskiLabirynt
             }
         }
 
-        private KIERUNEK[,] kret(KIERUNEK[,] GRID)
+        public KIERUNEK[,] kret(KIERUNEK[,] GRID, int KOLUMNA, int WIERSZ)
         {
             Random LOSOWA = new Random();
-            string[] KIERUNKI = { "KIERUNEK.N", "KIERUNEK.S", "KIERUNEK.W", "KIERUNEK.E" };
+            KIERUNEK[] KIERUNKI = { KIERUNEK.N, KIERUNEK.S, KIERUNEK.W, KIERUNEK.E };
             KIERUNKI = KIERUNKI.OrderBy(x => LOSOWA.Next()).ToArray();
 
-            
-            
+            foreach (KIERUNEK KIERUNEK in KIERUNKI)
+            {
+                int NOWAKOLUMNA = KOLUMNA + kierunkiY[KIERUNEK];
+                int NOWYWIERSZ = WIERSZ + kierunkiX[KIERUNEK];
+                
+                if (NOWAKOLUMNA <= SZEROKOSC - 1 && NOWAKOLUMNA >= 0 && NOWYWIERSZ <= SZEROKOSC - 1 && NOWYWIERSZ >= 0 && GRID[NOWYWIERSZ, NOWAKOLUMNA] == KIERUNEK.BRAK)
+                {
+                    GRID[WIERSZ, KOLUMNA] &= ~KIERUNEK;
+                    GRID[NOWYWIERSZ, NOWAKOLUMNA] &= ~naopak[KIERUNEK];
 
+                    GRID = kret(GRID, NOWAKOLUMNA, NOWYWIERSZ);
+
+                }
+            }
+            
+            
             return GRID; 
         }
 

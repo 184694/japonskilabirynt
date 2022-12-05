@@ -9,9 +9,8 @@ namespace JaponskiLabirynt
 
     internal class labirynt
     {
-        
-        public static int WYSOKOSC = 4;
-        public static int SZEROKOSC = 4;
+         
+        public int WYSOKOSC, SZEROKOSC;
 
         [Flags]
         public enum KIERUNEK
@@ -26,9 +25,12 @@ namespace JaponskiLabirynt
 
         public labirynt(int WYSOKOSC, int SZEROKOSC)
         {
+            this.WYSOKOSC = WYSOKOSC;
+            this.SZEROKOSC = SZEROKOSC;
+            
             KIERUNEK[,] GRID = new KIERUNEK[WYSOKOSC,SZEROKOSC];
             wypelnianie(GRID);
-            
+            kret(GRID);
 
         }
         
@@ -43,7 +45,41 @@ namespace JaponskiLabirynt
             }
         }
 
+        private KIERUNEK[,] kret(KIERUNEK[,] GRID)
+        {
+            Random LOSOWA = new Random();
+            string[] KIERUNKI = { "KIERUNEK.N", "KIERUNEK.S", "KIERUNEK.W", "KIERUNEK.E" };
+            KIERUNKI = KIERUNKI.OrderBy(x => LOSOWA.Next()).ToArray();
 
+            
+            
+
+            return GRID; 
+        }
+
+        readonly Dictionary<KIERUNEK, int> kierunkiX = new Dictionary<KIERUNEK, int>()
+        {
+            { KIERUNEK.N,  0},
+            { KIERUNEK.S,  0},
+            { KIERUNEK.W, -1},
+            { KIERUNEK.E,  1}
+        };
+
+        readonly Dictionary<KIERUNEK, int> kierunkiY = new Dictionary<KIERUNEK, int>()
+        {
+            { KIERUNEK.N, -1},
+            { KIERUNEK.S,  1},
+            { KIERUNEK.W,  0},
+            { KIERUNEK.E,  0}
+        };
+
+        readonly Dictionary<KIERUNEK, KIERUNEK> naopak = new Dictionary<KIERUNEK, KIERUNEK>()
+        {
+            { KIERUNEK.N, KIERUNEK.S},
+            { KIERUNEK.S, KIERUNEK.N},
+            { KIERUNEK.W, KIERUNEK.E},
+            { KIERUNEK.E, KIERUNEK.W}
+        };
 
 
     }

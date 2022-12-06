@@ -31,11 +31,11 @@ namespace JaponskiLabirynt
    
             GRID = new KIERUNEK[japonskilabirynt.WYSOKOSC, japonskilabirynt.SZEROKOSC];
             wypelnianie(GRID);
-
-            GRID = kret(GRID, 1, 1);
+            
+            GRID = kret(GRID, 0, 0);
         }
-        
-        private void wypelnianie(KIERUNEK[,] GRID)
+
+        public void wypelnianie(KIERUNEK[,] GRID)
         {
             for (int i = 0; i < japonskilabirynt.WYSOKOSC; i++)
             {
@@ -44,13 +44,12 @@ namespace JaponskiLabirynt
                         GRID[i, j] = WSZYSTKIEKIERUNKI;
                 }
             }
-
         }
-
+        
         public KIERUNEK[,] kret(KIERUNEK[,] GRID, int KOLUMNA, int WIERSZ)
         {
             Random LOSOWA = new Random();
-            KIERUNEK[] KIERUNKI = { KIERUNEK.N, KIERUNEK.S, KIERUNEK.W, KIERUNEK.E };
+            KIERUNEK[] KIERUNKI = { KIERUNEK.N, KIERUNEK.N, KIERUNEK.S, KIERUNEK.W, KIERUNEK.W, KIERUNEK.W, KIERUNEK.E, KIERUNEK.E };
             KIERUNKI = KIERUNKI.OrderBy(x => LOSOWA.Next()).ToArray();
 
             foreach (KIERUNEK KIERUNEK in KIERUNKI)

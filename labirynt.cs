@@ -49,8 +49,9 @@ namespace JaponskiLabirynt
                         GRID[i, j] = WSZYSTKIEKIERUNKI;
                 }
             }
+
         }
-        
+
         public KIERUNEK[,] kret(KIERUNEK[,] GRID, int KOLUMNA, int WIERSZ)
         {
             Random LOSOWA = new Random();
@@ -62,7 +63,10 @@ namespace JaponskiLabirynt
                 int NOWAKOLUMNA = KOLUMNA + kierunkiY[KIERUNEK];
                 int NOWYWIERSZ = WIERSZ + kierunkiX[KIERUNEK];
                 
-                if (NOWAKOLUMNA <= japonskilabirynt.SZEROKOSC - 1 && NOWAKOLUMNA >= 0 && NOWYWIERSZ <= WYSOKOSC - 1 && NOWYWIERSZ >= 0 && GRID[NOWYWIERSZ, NOWAKOLUMNA] == WSZYSTKIEKIERUNKI)
+                if (NOWAKOLUMNA <= japonskilabirynt.SZEROKOSC - 1 
+                    && NOWAKOLUMNA >= 0 && NOWYWIERSZ <= WYSOKOSC - 1 
+                    && NOWYWIERSZ >= 0 
+                    && GRID[NOWYWIERSZ, NOWAKOLUMNA] == WSZYSTKIEKIERUNKI)
                 {
                     GRID[WIERSZ, KOLUMNA] &= ~KIERUNEK;
                     GRID[NOWYWIERSZ, NOWAKOLUMNA] &= ~naopak[KIERUNEK];

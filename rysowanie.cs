@@ -13,7 +13,6 @@ namespace JaponskiLabirynt
     internal class rysowanie
     {
 
-        private japonskilabirynt MAIN;
         public labirynt.KIERUNEK[,] GRID;
         int[] USTAWIENIA;
         
@@ -60,18 +59,8 @@ namespace JaponskiLabirynt
 
                 int POLELABIRYNTUX = 1024 - USTAWIENIA[0];
                 int POLELABIRYNTUY = 768;
-
                 
-                if (japonskilabirynt.WYSOKOSC >= japonskilabirynt.SZEROKOSC)
-                {
-                    USTAWIENIA[2] = POLELABIRYNTUX / japonskilabirynt.WYSOKOSC;
-
-                }
-                else
-                {
-                    USTAWIENIA[2] = POLELABIRYNTUY / japonskilabirynt.SZEROKOSC;
-                }
-                
+                //USTAWIANIE POZYCJI LABIRYNTU
                 int OFFSETX = USTAWIENIA[0] + KOLUMNA * USTAWIENIA[2] + (POLELABIRYNTUX / 2 - (USTAWIENIA[2] * japonskilabirynt.WYSOKOSC)/2);
                 int OFFSETY = USTAWIENIA[1] + WIERSZ * USTAWIENIA[2] + (POLELABIRYNTUY / 2 - (USTAWIENIA[2] * japonskilabirynt.SZEROKOSC) / 2);
 

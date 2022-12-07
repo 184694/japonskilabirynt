@@ -2,10 +2,10 @@ namespace JaponskiLabirynt
 {
     public partial class japonskilabirynt : Form
     {
-        public static int WYSOKOSC = 10;
-        public static int SZEROKOSC = 10;
+        public static int WYSOKOSC = 3;
+        public static int SZEROKOSC = 3;
 
-        private static int[] USTAWIENIA = {350, 60, 60, 5}; // POZYCJAX, POZYCJAY, ROZMIARKOMORKI, PENWIDTH
+        private static int[] USTAWIENIA = {311, 0, 238, 10}; // POZYCJAX, POZYCJAY, ROZMIARKOMORKI, PENWIDTH
                                     //PADDING
         labirynt LABIRYNT;
         rysowanie RYSOWANIE;
@@ -25,8 +25,10 @@ namespace JaponskiLabirynt
 
         private void button1_Click(object sender, EventArgs e)
         {
-            LABIRYNT.wypelnianie(LABIRYNT.GRID);
-            LABIRYNT.kret(LABIRYNT.GRID, 0, 0);
+            textBox1.Visible = false;
+            //button1.Visible = false;
+            label1.Top = 20;
+            LABIRYNT.restart();
             Invalidate();
         }
     }

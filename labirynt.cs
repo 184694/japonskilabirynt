@@ -14,11 +14,10 @@ namespace JaponskiLabirynt
         [Flags]
         public enum KIERUNEK
         {
-            BRAK = 1 << 0,
-            N = 1 << 1,
-            S = 1 << 2,
-            W = 1 << 3,
-            E = 1 << 4
+            N = 1 << 0,
+            S = 1 << 1,
+            W = 1 << 2,
+            E = 1 << 3
         }
    
         public int WYSOKOSC, SZEROKOSC;
@@ -29,17 +28,23 @@ namespace JaponskiLabirynt
             this.WYSOKOSC = WYSOKOSC;
             this.SZEROKOSC = SZEROKOSC;
    
-            GRID = new KIERUNEK[japonskilabirynt.WYSOKOSC, japonskilabirynt.SZEROKOSC];
+            GRID = new KIERUNEK[WYSOKOSC, SZEROKOSC];
             wypelnianie(GRID);
+            Point START = znajdzstart(GRID);
+            Point KONIEC = znajdzkoniec(GRID);
             
-            GRID = kret(GRID, 0, 0);
+            GRID = kret(GRID, START.X, START.Y);
+            
+            GRID[START.Y, START.X] &= ~KIERUNEK.W;
+            GRID[KONIEC.Y, KONIEC.X] &= ~KIERUNEK.E;
+
         }
 
         public void wypelnianie(KIERUNEK[,] GRID)
         {
-            for (int i = 0; i < japonskilabirynt.WYSOKOSC; i++)
+            for (int i = 0; i < WYSOKOSC; i++)
             {
-                for (int j = 0; j < japonskilabirynt.SZEROKOSC; j++)
+                for (int j = 0; j < SZEROKOSC; j++)
                 {
                         GRID[i, j] = WSZYSTKIEKIERUNKI;
                 }
@@ -57,7 +62,7 @@ namespace JaponskiLabirynt
                 int NOWAKOLUMNA = KOLUMNA + kierunkiY[KIERUNEK];
                 int NOWYWIERSZ = WIERSZ + kierunkiX[KIERUNEK];
                 
-                if (NOWAKOLUMNA <= japonskilabirynt.SZEROKOSC - 1 && NOWAKOLUMNA >= 0 && NOWYWIERSZ <= japonskilabirynt.WYSOKOSC - 1 && NOWYWIERSZ >= 0 && GRID[NOWYWIERSZ, NOWAKOLUMNA] == WSZYSTKIEKIERUNKI)
+                if (NOWAKOLUMNA <= japonskilabirynt.SZEROKOSC - 1 && NOWAKOLUMNA >= 0 && NOWYWIERSZ <= WYSOKOSC - 1 && NOWYWIERSZ >= 0 && GRID[NOWYWIERSZ, NOWAKOLUMNA] == WSZYSTKIEKIERUNKI)
                 {
                     GRID[WIERSZ, KOLUMNA] &= ~KIERUNEK;
                     GRID[NOWYWIERSZ, NOWAKOLUMNA] &= ~naopak[KIERUNEK];
@@ -69,7 +74,7 @@ namespace JaponskiLabirynt
             return GRID;
         }
 
-        private const KIERUNEK WSZYSTKIEKIERUNKI = KIERUNEK.E | KIERUNEK.S | KIERUNEK.W | KIERUNEK.N;
+        public const KIERUNEK WSZYSTKIEKIERUNKI = KIERUNEK.E | KIERUNEK.S | KIERUNEK.W | KIERUNEK.N;
         readonly Dictionary<KIERUNEK, int> kierunkiX = new Dictionary<KIERUNEK, int>()
         {
             { KIERUNEK.E,  1},
@@ -94,6 +99,44 @@ namespace JaponskiLabirynt
             { KIERUNEK.S, KIERUNEK.N}
         };
 
+        private Point znajdzstart(KIERUNEK[,] GRID)
+        {
+            for (int i = 0; i < WYSOKOSC; i++)
+            {
+                for (int j = 0; j < SZEROKOSC; j++)
+                {
+                    if (GRID[i, j].HasFlag(WSZYSTKIEKIERUNKI))
+                        return new Point(i, j);
+                }
+            }
 
+            return new Point(0, 0);
+        }
+        
+        private Point znajdzkoniec(KIERUNEK[,] GRID)
+        {
+            for (int i = WYSOKOSC - 1; i > 0; i--)
+            {
+                for (int j = SZEROKOSC - 1; j > 0; j--)
+                {
+                    if (GRID[i, j].HasFlag(WSZYSTKIEKIERUNKI))
+                        return new Point(i, j);
+                }
+            }
+
+            return new Point(0, 0);
+        }
+
+        public void restart()
+        {
+            wypelnianie(GRID);
+            Point START = znajdzstart(GRID);
+            Point KONIEC = znajdzkoniec(GRID);
+
+            GRID = kret(GRID, START.X, START.Y);
+
+            GRID[START.Y, START.X] &= ~KIERUNEK.W;
+            GRID[KONIEC.Y, KONIEC.X] &= ~KIERUNEK.E;
+        }
     }
 }

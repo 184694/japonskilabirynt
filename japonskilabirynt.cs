@@ -2,13 +2,20 @@ namespace JaponskiLabirynt
 {
     public partial class japonskilabirynt : Form
     {
+        //POZYCJA LABIRYNTU [311 BO TO SZEROKOSC MENU]
+        public static int X = 311;
+
         public static int POLEOKNA_W = 1024;
         public static int POLEOKNA_H = 768;
-        public static int WYSOKOSC = 10;
-        public static int SZEROKOSC = 10;
-        public string ORIENTACJA = "PRAWO";
+        public static int POLELABIRYNTUX = POLEOKNA_W - X;
+        public static int POLELABIRYNTUY = POLEOKNA_H;
 
-        private static int[] USTAWIENIA = {311, 0, 0, 0}; // POZYCJAX, POZYCJAY, ROZMIARKOMORKI, PENWIDTH
+        //ROZMIAR LABIRYNTU W KOMORKACH
+        public static int WYSOKOSC = 5;
+        public static int SZEROKOSC = 5;
+
+        private bool GRA = false;
+        private int ROZMIARKOMORKI;
         labirynt LABIRYNT;
         rysowanie RYSOWANIE;
         gracz GRACZ;
@@ -19,22 +26,22 @@ namespace JaponskiLabirynt
             InitializeComponent();
             rozmiarlabiryntu();
             LABIRYNT = new labirynt(WYSOKOSC, SZEROKOSC);
-            RYSOWANIE = new rysowanie(LABIRYNT.GRID, USTAWIENIA, this);
-            GRACZ = new gracz(USTAWIENIA, this);
+            RYSOWANIE = new rysowanie(LABIRYNT.GRID, ROZMIARKOMORKI, this);
+            GRACZ = new gracz(ROZMIARKOMORKI, LABIRYNT.GRID, this);
             POLICJANT = new policja();
         }
 
         public void rozmiarlabiryntu()
         {
-            //USTAWIANIE SZEROKOSCI LABIRYNTU DYNAMICZNIE DO ROZMIARU OKNA
+            //USTAWIANIE SZEROKOSCI LABIRYNTU DYNAMICZNIE DO ROZMIARU OKNA ABY GO ZMIEŒCIÆ
             if (SZEROKOSC >= WYSOKOSC)
             {
-                USTAWIENIA[2] = (POLEOKNA_W - USTAWIENIA[0]) / SZEROKOSC;
+                ROZMIARKOMORKI = (POLEOKNA_W - X) / SZEROKOSC;
 
             }
             else
             {
-                USTAWIENIA[2] = POLEOKNA_H / WYSOKOSC;
+                ROZMIARKOMORKI = POLEOKNA_H / WYSOKOSC;
             }
         }
 
@@ -43,15 +50,10 @@ namespace JaponskiLabirynt
 
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             textBox1.Visible = false;
-            button1.Visible = false;
+            //button1.Visible = false;
 
             label1.Top = 20;
             LABIRYNT.restart();
@@ -61,59 +63,40 @@ namespace JaponskiLabirynt
 
         private void japonskilabirynt_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == 'a' || e.KeyChar == 'A')
-            {
-                if (ORIENTACJA == "LEWO") ;
-                else
+            if (GRA == true) {
+                if (e.KeyChar == 'a' || e.KeyChar == 'A')
                 {
-                    ORIENTACJA = "LEWO";
                     GRACZ.orientacja(0);
+                    GRACZ.ruch(-1, 0);
                 }
-                
-                GRACZ.ruch(-1, 0);
-                GRACZ.cofnijorientacje(0);
-
-            }
-            else if (e.KeyChar == 'w' || e.KeyChar == 'W')
-            {
-                if (ORIENTACJA == "GORA") ;
-                else
+                else if (e.KeyChar == 'w' || e.KeyChar == 'W')
                 {
-                    ORIENTACJA = "GORA";
+
                     GRACZ.orientacja(1);
+                    GRACZ.ruch(0, -1);
+
                 }
-
-                GRACZ.ruch(0, -1);
-                GRACZ.cofnijorientacje(1);
-
-            }
-            else if (e.KeyChar == 's' || e.KeyChar == 'S')
-            {
-                if (ORIENTACJA != "DOL")
+                else if (e.KeyChar == 's' || e.KeyChar == 'S')
                 {
                     GRACZ.orientacja(2);
+                    GRACZ.ruch(0, 1);
                 }
-
-                GRACZ.ruch(0, 1);
-                Invalidate();
-                
-                if (ORIENTACJA != "DOL") {
-                    ORIENTACJA = "DOL";
-                    GRACZ.cofnijorientacje(2);
-                }
-            }
-            else if (e.KeyChar == 'd' || e.KeyChar == 'D')
-            {
-                if (ORIENTACJA == "PRAWO") ;
-                else
+                else if (e.KeyChar == 'd' || e.KeyChar == 'D')
                 {
-                    ORIENTACJA = "PRAWO";
                     GRACZ.orientacja(3);
+                    GRACZ.ruch(1, 0);
                 }
-                GRACZ.ruch(1, 0);
-                GRACZ.cofnijorientacje(3);
-
             }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

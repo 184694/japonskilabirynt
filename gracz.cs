@@ -10,33 +10,38 @@ namespace JaponskiLabirynt
 
     internal class gracz
     {
+        public bool ZWYCIESTWO = false;
         public int OFFSETX, OFFSETY;
-        public int[] USTAWIENIA;
+        public int ROZMIARKOMORKI;
+        private KIERUNEK[,] GRID;
         private japonskilabirynt MAIN;
         private PictureBox GRACZ;
         private Point POZYCJAGRACZA;
+        private string KIERUNEKGRACZA;
         static public Image GRACZIMG = Image.FromFile("../../../pliki/car.png");
-        private int POLELABIRYNTUX, POLELABIRYNTUY;
-        private int ZOOM = 4;
 
-        public gracz(int[] USTAWIENIA, japonskilabirynt MAIN)
+        public gracz(int ROZMIARKOMORKI, KIERUNEK[,] GRID, japonskilabirynt MAIN)
         {
-            this.USTAWIENIA = USTAWIENIA;
+            this.ROZMIARKOMORKI = ROZMIARKOMORKI;
             this.MAIN = MAIN;
+            this.GRID = GRID;
 
             POZYCJAGRACZA = new Point(0, 0);
 
             GRACZ = new PictureBox();
+            GRACZ.SizeMode = PictureBoxSizeMode.Zoom;
+            GRACZ.Size = new Size(ROZMIARKOMORKI/2, ROZMIARKOMORKI/3);
             GRACZ.Image = GRACZIMG;
-            GRACZ.Size = new Size(GRACZIMG.Width/(japonskilabirynt.WYSOKOSC), GRACZIMG.Height / (japonskilabirynt.SZEROKOSC));
-            GRACZ.BackColor = Color.Transparent;
-            
-            POLELABIRYNTUX = 1024 - USTAWIENIA[0];
-            POLELABIRYNTUY = 768;
 
-            //    GDZIE ZACZYNA SIE   
-            OFFSETX = USTAWIENIA[0] + POZYCJAGRACZA.X * USTAWIENIA[2] + (POLELABIRYNTUX / 2 - (USTAWIENIA[2] * japonskilabirynt.WYSOKOSC) / 2) + (GRACZ.Width / ZOOM) / 2;
-            OFFSETY = USTAWIENIA[1] + POZYCJAGRACZA.Y * USTAWIENIA[2] + (POLELABIRYNTUY / 2 - (USTAWIENIA[2] * japonskilabirynt.SZEROKOSC) / 2) + USTAWIENIA[2] / 2 - (GRACZ.Height / ZOOM) / 2 - GRACZ.Height/2;
+
+            KIERUNEKGRACZA = "PRAWO";
+            GRACZ.BackColor = Color.Transparent;
+
+            //         [PRZES. MENU]     + [KOORD. GRACZ.] * [PRZESKOK CO KOM.] + [WYRÓWNANIE LABIRYNTU NA ŚRODEK W POZIOMIE]   
+            OFFSETX = japonskilabirynt.X + POZYCJAGRACZA.X * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - japonskilabirynt.SZEROKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Width/2;
+
+            //        [KOORD. GRACZ.] * [PRZESKOK CO KOM.] + [WYRÓWNANIE LABIRYNTU NA ŚRODEK W PIONIE]                                    + PRZESUNIECIE NA SRODEK KOMORKI
+            OFFSETY = POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - japonskilabirynt.WYSOKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Height;
             GRACZ.Location = new Point(OFFSETX, OFFSETY);
 
             MAIN.Paint += new System.Windows.Forms.PaintEventHandler(paint);
@@ -44,13 +49,26 @@ namespace JaponskiLabirynt
 
         private int liczgraczx()
         {
-            OFFSETX = USTAWIENIA[0] + POZYCJAGRACZA.X * USTAWIENIA[2] + (POLELABIRYNTUX / 2 - (USTAWIENIA[2] * japonskilabirynt.WYSOKOSC) / 2) + (GRACZ.Width / ZOOM) / 2;
+            if (KIERUNEKGRACZA == "GORA" || KIERUNEKGRACZA == "DOL")
+            {
+                OFFSETX = japonskilabirynt.X + POZYCJAGRACZA.X * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - japonskilabirynt.SZEROKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Width;
+            }
+            else
+                OFFSETX = japonskilabirynt.X + POZYCJAGRACZA.X * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - japonskilabirynt.SZEROKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Width / 2;
+
             return OFFSETX;
         }
 
         private int liczgraczy()
         {
-            OFFSETY = USTAWIENIA[1] + POZYCJAGRACZA.Y * USTAWIENIA[2] + (POLELABIRYNTUY / 2 - (USTAWIENIA[2] * japonskilabirynt.SZEROKOSC) / 2) + USTAWIENIA[2] / 2 - (GRACZ.Height / ZOOM) / 2 - GRACZ.Height / 2;
+            //OFFSETY = USTAWIENIA[1] + POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY / 2 - (ROZMIARKOMORKI * japonskilabirynt.SZEROKOSC) / 2) + ROZMIARKOMORKI / 2 - GRACZ.Height/ 2 - GRACZ.Height / 2;
+
+            if (KIERUNEKGRACZA == "GORA" || KIERUNEKGRACZA == "DOL")
+            {
+                OFFSETY = POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - japonskilabirynt.WYSOKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Height/2;
+            }
+            else
+                OFFSETY = POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - japonskilabirynt.WYSOKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Height;
             return OFFSETY;
         }
 
@@ -58,51 +76,113 @@ namespace JaponskiLabirynt
         {
             switch (kierunek)
             {
-                case 0:
-                    GRACZ.Image.RotateFlip(RotateFlipType.RotateNoneFlipNone);
-                    GRACZ.Size = new Size(GRACZIMG.Width / (japonskilabirynt.WYSOKOSC), GRACZIMG.Height / (japonskilabirynt.SZEROKOSC));
+                case 0: // a
+                    if (KIERUNEKGRACZA == "PRAWO")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 2, ROZMIARKOMORKI / 3);
+                    }
+                    else if (KIERUNEKGRACZA == "GORA")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.Rotate90FlipX);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 2, ROZMIARKOMORKI / 3);
+                    }
+                    else if (KIERUNEKGRACZA == "DOL")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 2, ROZMIARKOMORKI / 3);
+                    }
+                    KIERUNEKGRACZA = "LEWO";
                     break;
-                case 1:
-                    GRACZ.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                    GRACZ.Size = new Size(GRACZIMG.Width / (japonskilabirynt.WYSOKOSC), GRACZIMG.Height / (japonskilabirynt.SZEROKOSC));
+                case 1: // w
+                    if (KIERUNEKGRACZA == "LEWO")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 3, ROZMIARKOMORKI / 2);
+                    }
+                    else if (KIERUNEKGRACZA == "PRAWO")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.Rotate90FlipY);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 3, ROZMIARKOMORKI / 2);
+                    }
+                    else if (KIERUNEKGRACZA == "DOL")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 3, ROZMIARKOMORKI / 2);
+                    }
+                    KIERUNEKGRACZA = "GORA";
                     break;
-                case 2:
-                    GRACZ.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                    GRACZ.Size = new Size(GRACZIMG.Width / (japonskilabirynt.WYSOKOSC), GRACZIMG.Height / (japonskilabirynt.SZEROKOSC));
+                case 2: // s
+                    if (KIERUNEKGRACZA == "LEWO")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.Rotate90FlipY);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 3, ROZMIARKOMORKI / 2);
+                    }
+                    else if (KIERUNEKGRACZA == "GORA")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 3, ROZMIARKOMORKI / 2);
+                    }
+                    else if (KIERUNEKGRACZA == "PRAWO")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 3, ROZMIARKOMORKI / 2);
+                    }
+                    KIERUNEKGRACZA = "DOL";
                     break;
-                case 3:
-                    break;
-            }
-
-        }
-
-        public void cofnijorientacje(int kierunek)
-        {
-            switch (kierunek)
-            {
-                case 0:
-                    GRACZ.Image.RotateFlip(RotateFlipType.RotateNoneFlipNone);
-                    GRACZ.Size = new Size(GRACZIMG.Width / (japonskilabirynt.WYSOKOSC), GRACZIMG.Height / (japonskilabirynt.SZEROKOSC));
-                    break;
-                case 1:
-                    GRACZ.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
-                    GRACZ.Size = new Size(GRACZIMG.Width / (japonskilabirynt.WYSOKOSC), GRACZIMG.Height / (japonskilabirynt.SZEROKOSC));
-                    break;
-                case 2:
-                    GRACZ.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
-                    GRACZ.Size = new Size(GRACZIMG.Width / (japonskilabirynt.WYSOKOSC), GRACZIMG.Height / (japonskilabirynt.SZEROKOSC));
-                    break;
-                case 3:
+                case 3: // d
+                    if (KIERUNEKGRACZA == "LEWO")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 2, ROZMIARKOMORKI / 3);
+                    }
+                    else if (KIERUNEKGRACZA == "GORA")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 2, ROZMIARKOMORKI / 3);
+                    }
+                    else if (KIERUNEKGRACZA == "DOL")
+                    {
+                        GRACZ.Image.RotateFlip(RotateFlipType.Rotate90FlipX);
+                        GRACZ.Size = new Size(ROZMIARKOMORKI / 2, ROZMIARKOMORKI / 3);
+                    }
+                    KIERUNEKGRACZA = "PRAWO";
                     break;
             }
         }
 
         public void ruch(int x, int y)
         {
+            if (POZYCJAGRACZA.X != japonskilabirynt.SZEROKOSC)
+            {
+                if (x == 1 && !GRID[POZYCJAGRACZA.Y, POZYCJAGRACZA.X].HasFlag(KIERUNEK.E))
+                {
+                    POZYCJAGRACZA.X += x;
+                }
+                else if (x == -1 && !GRID[POZYCJAGRACZA.Y, POZYCJAGRACZA.X].HasFlag(KIERUNEK.W))
+                {
+                    //zeby nie wyjsc przez start poza tablice
+                    if (POZYCJAGRACZA.X != 0)
+                    {
+                        POZYCJAGRACZA.X += x;
+                    }
+                }
+                else if (y == 1 && !GRID[POZYCJAGRACZA.Y, POZYCJAGRACZA.X].HasFlag(KIERUNEK.S))
+                {
+                    POZYCJAGRACZA.Y += y;
+                }
+                else if (y == -1 && !GRID[POZYCJAGRACZA.Y, POZYCJAGRACZA.X].HasFlag(KIERUNEK.N))
+                {
+                    POZYCJAGRACZA.Y += y;
+                }
+            }
+            else
+            {
+                ZWYCIESTWO = true;
+                POZYCJAGRACZA.X = 0;
+                POZYCJAGRACZA.Y = 0;
+            }
 
-            POZYCJAGRACZA.X += x;
-            POZYCJAGRACZA.Y += y;
-            
             GRACZ.Location = new Point(liczgraczx(), liczgraczy());
             MAIN.Invalidate();
 

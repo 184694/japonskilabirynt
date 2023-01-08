@@ -14,18 +14,18 @@ namespace JaponskiLabirynt
     {
 
         public labirynt.KIERUNEK[,] GRID;
-        int[] USTAWIENIA;
-        
+        int ROZMIARKOMORKI;
+
         static public Image PROSTA = Image.FromFile("../../../pliki/1.png");
         static public Image ZAKRET = Image.FromFile("../../../pliki/2.png");
         static public Image SKRZYZOWANIE3 = Image.FromFile("../../../pliki/3.png");
         static public Image SKRZYZOWANIE4 = Image.FromFile("../../../pliki/5.png");
         static public Image DEADEND = Image.FromFile("../../../pliki/4.png");
 
-        public rysowanie(labirynt.KIERUNEK[,] GRID, int[] USTAWIENIA, japonskilabirynt MAIN)
+        public rysowanie(labirynt.KIERUNEK[,] GRID, int ROZMIARKOMORKI, japonskilabirynt MAIN)
         {
             this.GRID = GRID;
-            this.USTAWIENIA = USTAWIENIA;
+            this.ROZMIARKOMORKI = ROZMIARKOMORKI;
             MAIN.Paint += new PaintEventHandler(paintlabirynt);
         }
 
@@ -33,39 +33,35 @@ namespace JaponskiLabirynt
         {
             Graphics GRAFIKA = e.Graphics;
 
-            for (int WIERSZ = 0; WIERSZ < japonskilabirynt.SZEROKOSC; WIERSZ++)
+            for (int KOLUMNA = 0; KOLUMNA < japonskilabirynt.WYSOKOSC; KOLUMNA++)
             {
-                for (int KOLUMNA = 0; KOLUMNA < japonskilabirynt.WYSOKOSC; KOLUMNA++)
+                for (int WIERSZ = 0; WIERSZ < japonskilabirynt.SZEROKOSC; WIERSZ++)
                 {
-                    rysujkomorke(GRID, KOLUMNA, WIERSZ, GRAFIKA, USTAWIENIA);
+                    rysujkomorke(GRID, KOLUMNA, WIERSZ, GRAFIKA);
                 }
             }
         }
 
 
-        private void rysujkomorke(labirynt.KIERUNEK[,] GRID, int KOLUMNA, int WIERSZ, Graphics GRAFIKA, int[] USTAWIENIA)
+        private void rysujkomorke(labirynt.KIERUNEK[,] GRID, int KOLUMNA, int WIERSZ, Graphics GRAFIKA)
         {
 
             using (Pen SCIANA = new Pen(Color.Black))
             using (SolidBrush KOMORKA = new SolidBrush(Color.White))
             {
 
-                SCIANA.Width = USTAWIENIA[3];
+                SCIANA.Width = 0;
                 SCIANA.EndCap = LineCap.Round;
                 SCIANA.StartCap = LineCap.Round;
 
+                //             [PRZES. MENU]     +      [KTORY WIERSZ]      +             [(CAŁE DOSTĘPNE POLE - SZEROKOSC LABIRYNTU) / 2]
+                int OFFSETX = japonskilabirynt.X + WIERSZ * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - japonskilabirynt.SZEROKOSC * ROZMIARKOMORKI) / 2;
 
-                //int OFFSETX = KOLUMNA * USTAWIENIA[2] + USTAWIENIA[3] / 2 + USTAWIENIA[3] + USTAWIENIA[0];
+                //             [KTORY WIERSZ]         +                   [(CAŁE DOSTĘPNE POLE - WYSOKOSC LABIRYNTU) / 2]
+                int OFFSETY = KOLUMNA * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - japonskilabirynt.WYSOKOSC*ROZMIARKOMORKI) / 2;
 
-                int POLELABIRYNTUX = 1024 - USTAWIENIA[0];
-                int POLELABIRYNTUY = 768;
-                
-                //USTAWIANIE POZYCJI LABIRYNTU
-                int OFFSETX = USTAWIENIA[0] + KOLUMNA * USTAWIENIA[2] + (POLELABIRYNTUX / 2 - (USTAWIENIA[2] * japonskilabirynt.WYSOKOSC)/2);
-                int OFFSETY = USTAWIENIA[1] + WIERSZ * USTAWIENIA[2] + (POLELABIRYNTUY / 2 - (USTAWIENIA[2] * japonskilabirynt.SZEROKOSC) / 2);
+                int ILOSCKIERUNKOW = ileflag((int)GRID[KOLUMNA, WIERSZ]);
 
-                int ILOSCKIERUNKOW = ileflag((int)GRID[KOLUMNA, WIERSZ]);              
-           
                 //DEAD END
                 if (ILOSCKIERUNKOW == 3)
                 {
@@ -76,22 +72,22 @@ namespace JaponskiLabirynt
                         if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.S))
                         {
                             DEADEND.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                            GRAFIKA.DrawImage(DEADEND, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                            GRAFIKA.DrawImage(DEADEND, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                             DEADEND.RotateFlip(RotateFlipType.RotateNoneFlipY);
                         }
-                        else GRAFIKA.DrawImage(DEADEND, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                        else GRAFIKA.DrawImage(DEADEND, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
 
 
                     }
                     //DEAD END W BOK
                     else if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.N) && warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.S))
                     {
-                        
+
                         if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.E))
                         {
                             DEADEND.RotateFlip(RotateFlipType.Rotate90FlipNone);
                             DEADEND.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                            GRAFIKA.DrawImage(DEADEND, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                            GRAFIKA.DrawImage(DEADEND, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                             DEADEND.RotateFlip(RotateFlipType.RotateNoneFlipY);
                             DEADEND.RotateFlip(RotateFlipType.Rotate270FlipNone);
                         }
@@ -99,27 +95,28 @@ namespace JaponskiLabirynt
                         {
                             DEADEND.RotateFlip(RotateFlipType.Rotate90FlipNone);
                             DEADEND.RotateFlip(RotateFlipType.RotateNoneFlipXY);
-                            GRAFIKA.DrawImage(DEADEND, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                            GRAFIKA.DrawImage(DEADEND, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                             DEADEND.RotateFlip(RotateFlipType.RotateNoneFlipXY);
                             DEADEND.RotateFlip(RotateFlipType.Rotate270FlipNone);
                         }
-                        
+
                     }
                 }
-                
+
                 //PROSTA I ZAKRET
-                else if (ILOSCKIERUNKOW == 2){
-                   
+                else if (ILOSCKIERUNKOW == 2)
+                {
+
                     //PROSTA W GORE
                     if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.W) && warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.E))
                     {
-                        GRAFIKA.DrawImage(PROSTA, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                        GRAFIKA.DrawImage(PROSTA, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                     }
                     //PROSTA W BOK
                     else if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.N) && warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.S))
                     {
                         PROSTA.RotateFlip(RotateFlipType.Rotate90FlipXY);
-                        GRAFIKA.DrawImage(PROSTA, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                        GRAFIKA.DrawImage(PROSTA, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                         PROSTA.RotateFlip(RotateFlipType.Rotate270FlipXY);
 
                     }
@@ -127,14 +124,14 @@ namespace JaponskiLabirynt
                     //ZAKRET GORA LEWO
                     if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.S) && warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.E))
                     {
-                        GRAFIKA.DrawImage(ZAKRET, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                        GRAFIKA.DrawImage(ZAKRET, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                     }
 
                     //ZAKRET GORA PRAWO
                     if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.S) && warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.W))
                     {
                         ZAKRET.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                        GRAFIKA.DrawImage(ZAKRET, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                        GRAFIKA.DrawImage(ZAKRET, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                         ZAKRET.RotateFlip(RotateFlipType.RotateNoneFlipX);
                     }
 
@@ -142,7 +139,7 @@ namespace JaponskiLabirynt
                     if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.N) && warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.E))
                     {
                         ZAKRET.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                        GRAFIKA.DrawImage(ZAKRET, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                        GRAFIKA.DrawImage(ZAKRET, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                         ZAKRET.RotateFlip(RotateFlipType.RotateNoneFlipY);
                     }
 
@@ -151,7 +148,7 @@ namespace JaponskiLabirynt
                     {
                         ZAKRET.RotateFlip(RotateFlipType.RotateNoneFlipX);
                         ZAKRET.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                        GRAFIKA.DrawImage(ZAKRET, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                        GRAFIKA.DrawImage(ZAKRET, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                         ZAKRET.RotateFlip(RotateFlipType.RotateNoneFlipX);
                         ZAKRET.RotateFlip(RotateFlipType.RotateNoneFlipY);
                     }
@@ -163,22 +160,22 @@ namespace JaponskiLabirynt
                     //SKRZYZOWANIE WYCHODZACE W DOL
                     if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.N))
                     {
-                        GRAFIKA.DrawImage(SKRZYZOWANIE3, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                        GRAFIKA.DrawImage(SKRZYZOWANIE3, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                     }
 
                     //SKRZYZOWANIE WYCHODZACE W GORE
                     if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.S))
                     {
                         SKRZYZOWANIE3.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                        GRAFIKA.DrawImage(SKRZYZOWANIE3, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                        GRAFIKA.DrawImage(SKRZYZOWANIE3, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                         SKRZYZOWANIE3.RotateFlip(RotateFlipType.RotateNoneFlipY);
                     }
-                    
+
                     //SKRZYZOWANIE WYCHODZACE W PRAWO
                     if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.W))
                     {
                         SKRZYZOWANIE3.RotateFlip(RotateFlipType.Rotate90FlipXY);
-                        GRAFIKA.DrawImage(SKRZYZOWANIE3, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                        GRAFIKA.DrawImage(SKRZYZOWANIE3, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                         SKRZYZOWANIE3.RotateFlip(RotateFlipType.Rotate270FlipXY);
                     }
 
@@ -187,7 +184,7 @@ namespace JaponskiLabirynt
                     {
                         SKRZYZOWANIE3.RotateFlip(RotateFlipType.Rotate90FlipXY);
                         SKRZYZOWANIE3.RotateFlip(RotateFlipType.RotateNoneFlipX);
-                        GRAFIKA.DrawImage(SKRZYZOWANIE3, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                        GRAFIKA.DrawImage(SKRZYZOWANIE3, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                         SKRZYZOWANIE3.RotateFlip(RotateFlipType.RotateNoneFlipX);
                         SKRZYZOWANIE3.RotateFlip(RotateFlipType.Rotate270FlipXY);
 
@@ -196,26 +193,26 @@ namespace JaponskiLabirynt
                 }
                 else if (ILOSCKIERUNKOW == 0)
                 {
-                    GRAFIKA.DrawImage(SKRZYZOWANIE4, OFFSETX, OFFSETY, USTAWIENIA[2], USTAWIENIA[2]);
+                    GRAFIKA.DrawImage(SKRZYZOWANIE4, OFFSETX, OFFSETY, ROZMIARKOMORKI, ROZMIARKOMORKI);
                 }
-         
+
                 // WYSWIETLA ILE SCIAN MA ZABLOKOWANYCH DROGA
                 Font FONT = new Font("Arial", 16);
-                //GRAFIKA.DrawString(ILOSCKIERUNKOW.ToString(), FONT, KOMORKA, OFFSETX + USTAWIENIA[2]/2, OFFSETY + USTAWIENIA[2]/2-16);
+                //GRAFIKA.DrawString(ILOSCKIERUNKOW.ToString(), FONT, KOMORKA, OFFSETX + ROZMIARKOMORKI/2, OFFSETY + ROZMIARKOMORKI/2-16);
 
 
                 /* RYSOWANIE SCIAN LABIRYNTU
                 if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.N))
-                    GRAFIKA.DrawLine(SCIANA, new PointF(OFFSETX, OFFSETY), new PointF(OFFSETX + USTAWIENIA[2], OFFSETY));
+                    GRAFIKA.DrawLine(SCIANA, new PointF(OFFSETX, OFFSETY), new PointF(OFFSETX + ROZMIARKOMORKI, OFFSETY));
 
                 if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.S))
-                    GRAFIKA.DrawLine(SCIANA, new PointF(OFFSETX, OFFSETY + USTAWIENIA[2]), new PointF(OFFSETX + USTAWIENIA[2], OFFSETY + USTAWIENIA[2]));
+                    GRAFIKA.DrawLine(SCIANA, new PointF(OFFSETX, OFFSETY + ROZMIARKOMORKI), new PointF(OFFSETX + ROZMIARKOMORKI, OFFSETY + ROZMIARKOMORKI));
 
                 if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.W))
-                    GRAFIKA.DrawLine(SCIANA, new PointF(OFFSETX, OFFSETY), new PointF(OFFSETX, OFFSETY + USTAWIENIA[2]));
+                    GRAFIKA.DrawLine(SCIANA, new PointF(OFFSETX, OFFSETY), new PointF(OFFSETX, OFFSETY + ROZMIARKOMORKI));
 
                 if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.E))
-                    GRAFIKA.DrawLine(SCIANA, new PointF(OFFSETX + USTAWIENIA[2], OFFSETY), new PointF(OFFSETX + USTAWIENIA[2], OFFSETY + USTAWIENIA[2]));
+                    GRAFIKA.DrawLine(SCIANA, new PointF(OFFSETX + ROZMIARKOMORKI, OFFSETY), new PointF(OFFSETX + ROZMIARKOMORKI, OFFSETY + ROZMIARKOMORKI));
                 */
             }
         }

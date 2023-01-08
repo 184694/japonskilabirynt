@@ -100,13 +100,14 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.White;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(83, 174);
+            this.label2.Location = new System.Drawing.Point(86, 136);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(121, 30);
             this.label2.TabIndex = 6;
@@ -117,7 +118,7 @@
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.White;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(101, 135);
+            this.label3.Location = new System.Drawing.Point(104, 85);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(84, 30);
             this.label3.TabIndex = 7;
@@ -127,7 +128,7 @@
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Black;
             this.pictureBox2.Image = global::JaponskiLabirynt.Properties.Resources.h1;
-            this.pictureBox2.Location = new System.Drawing.Point(60, 224);
+            this.pictureBox2.Location = new System.Drawing.Point(57, 180);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(36, 29);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -138,7 +139,7 @@
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Black;
             this.pictureBox3.Image = global::JaponskiLabirynt.Properties.Resources.h1;
-            this.pictureBox3.Location = new System.Drawing.Point(124, 224);
+            this.pictureBox3.Location = new System.Drawing.Point(122, 180);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(36, 29);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -149,7 +150,7 @@
             // 
             this.pictureBox4.BackColor = System.Drawing.Color.Black;
             this.pictureBox4.Image = global::JaponskiLabirynt.Properties.Resources.h1;
-            this.pictureBox4.Location = new System.Drawing.Point(187, 224);
+            this.pictureBox4.Location = new System.Drawing.Point(190, 180);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(36, 29);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -161,7 +162,7 @@
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.White;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(12, 332);
+            this.label4.Location = new System.Drawing.Point(161, 223);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(115, 30);
             this.label4.TabIndex = 11;
@@ -172,7 +173,7 @@
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.Color.White;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(12, 289);
+            this.label5.Location = new System.Drawing.Point(12, 223);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(134, 30);
             this.label5.TabIndex = 12;

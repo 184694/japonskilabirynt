@@ -60,8 +60,8 @@ namespace JaponskiLabirynt
 
             foreach (KIERUNEK KIERUNEK in KIERUNKI)
             {
-                int NOWAKOLUMNA = KOLUMNA + kierunkiY[KIERUNEK];
-                int NOWYWIERSZ = WIERSZ + kierunkiX[KIERUNEK];
+                int NOWAKOLUMNA = KOLUMNA + kierunkiX[KIERUNEK];
+                int NOWYWIERSZ = WIERSZ + kierunkiY[KIERUNEK];
                 
                 if (NOWAKOLUMNA <= japonskilabirynt.SZEROKOSC - 1 
                     && NOWAKOLUMNA >= 0 && NOWYWIERSZ <= WYSOKOSC - 1 
@@ -110,7 +110,7 @@ namespace JaponskiLabirynt
                 for (int j = 0; j < SZEROKOSC; j++)
                 {
                     if (GRID[i, j].HasFlag(WSZYSTKIEKIERUNKI))
-                        return new Point(i, j);
+                        return new Point(j, i);
                 }
             }
 
@@ -124,7 +124,7 @@ namespace JaponskiLabirynt
                 for (int j = SZEROKOSC - 1; j > 0; j--)
                 {
                     if (GRID[i, j].HasFlag(WSZYSTKIEKIERUNKI))
-                        return new Point(i, j);
+                        return new Point(j, i);
                 }
             }
 

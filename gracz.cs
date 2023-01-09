@@ -155,11 +155,15 @@ namespace JaponskiLabirynt
 
         public void ruch(int x, int y)
         {
-            if (POZYCJAGRACZA.X != SZEROKOSC)
-            {
+
                 if (x == 1 && !GRID[POZYCJAGRACZA.Y, POZYCJAGRACZA.X].HasFlag(KIERUNEK.E))
                 {
-                    POZYCJAGRACZA.X += x;
+                    if (POZYCJAGRACZA.X + x == SZEROKOSC)
+                    {
+                        ZWYCIESTWO = true;
+                    }
+                    else
+                        POZYCJAGRACZA.X += x;
                 }
                 else if (x == -1 && !GRID[POZYCJAGRACZA.Y, POZYCJAGRACZA.X].HasFlag(KIERUNEK.W))
                 {
@@ -177,13 +181,6 @@ namespace JaponskiLabirynt
                 {
                     POZYCJAGRACZA.Y += y;
                 }
-            }
-            else
-            {
-                ZWYCIESTWO = true;
-                POZYCJAGRACZA.X = 0;
-                POZYCJAGRACZA.Y = 0;
-            }
 
             GRACZ.Location = new Point(liczgraczx(), liczgraczy());
             MAIN.Invalidate();

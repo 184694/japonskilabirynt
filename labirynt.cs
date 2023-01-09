@@ -19,7 +19,8 @@ namespace JaponskiLabirynt
             W = 1 << 2,
             E = 1 << 3
         }
-   
+
+        public int MAXROZMIAR = 30;
         public int WYSOKOSC, SZEROKOSC;
         public KIERUNEK[,] GRID;
     
@@ -28,16 +29,8 @@ namespace JaponskiLabirynt
             this.WYSOKOSC = WYSOKOSC;
             this.SZEROKOSC = SZEROKOSC;
    
-            GRID = new KIERUNEK[30, 30];
-            wypelnianie(GRID);
-            Point START = znajdzstart(GRID);
-            Point KONIEC = znajdzkoniec(GRID);
-            
-            GRID = kret(GRID, START.X, START.Y);
-            
-            GRID[START.Y, START.X] &= ~KIERUNEK.W;
-            GRID[KONIEC.Y, KONIEC.X] &= ~KIERUNEK.E;
-
+            GRID = new KIERUNEK[MAXROZMIAR, MAXROZMIAR];
+            reset(WYSOKOSC, SZEROKOSC);
         }
 
         public void wypelnianie(KIERUNEK[,] GRID)
@@ -103,44 +96,15 @@ namespace JaponskiLabirynt
             { KIERUNEK.S, KIERUNEK.N}
         };
 
-        private Point znajdzstart(KIERUNEK[,] GRID)
+        public void reset(int WYSOKOSC, int SZEROKOSC)
         {
-            for (int i = 0; i < WYSOKOSC; i++)
-            {
-                for (int j = 0; j < SZEROKOSC; j++)
-                {
-                    if (GRID[i, j].HasFlag(WSZYSTKIEKIERUNKI))
-                        return new Point(j, i);
-                }
-            }
+            this.WYSOKOSC = WYSOKOSC;
+            this.SZEROKOSC = SZEROKOSC;
 
-            return new Point(0, 0);
-        }
-        
-        private Point znajdzkoniec(KIERUNEK[,] GRID)
-        {
-            for (int i = WYSOKOSC - 1; i > 0; i--)
-            {
-                for (int j = SZEROKOSC - 1; j > 0; j--)
-                {
-                    if (GRID[i, j].HasFlag(WSZYSTKIEKIERUNKI))
-                        return new Point(j, i);
-                }
-            }
-
-            return new Point(0, 0);
-        }
-
-        public void restart()
-        {
             wypelnianie(GRID);
-            Point START = znajdzstart(GRID);
-            Point KONIEC = znajdzkoniec(GRID);
-
-            GRID = kret(GRID, START.X, START.Y);
-
-            GRID[START.Y, START.X] &= ~KIERUNEK.W;
-            GRID[KONIEC.Y, KONIEC.X] &= ~KIERUNEK.E;
+            GRID = kret(GRID, 0, 0);
+            GRID[0, 0] &= ~KIERUNEK.W;
+            GRID[WYSOKOSC - 1, SZEROKOSC - 1] &= ~KIERUNEK.E;
         }
     }
 }

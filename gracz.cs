@@ -18,19 +18,21 @@ namespace JaponskiLabirynt
         private PictureBox GRACZ;
         private Point POZYCJAGRACZA;
         private string KIERUNEKGRACZA;
+        private int WYSOKOSC, SZEROKOSC;
         static public Image GRACZIMG = Image.FromFile("../../../pliki/car.png");
 
-        public gracz(int ROZMIARKOMORKI, KIERUNEK[,] GRID, japonskilabirynt MAIN)
+        public gracz(int ROZMIARKOMORKI, KIERUNEK[,] GRID, int WYSOKOSC, int SZEROKOSC, japonskilabirynt MAIN)
         {
             this.ROZMIARKOMORKI = ROZMIARKOMORKI;
             this.MAIN = MAIN;
             this.GRID = GRID;
-
+            this.SZEROKOSC = SZEROKOSC;
+            this.WYSOKOSC = WYSOKOSC;
             POZYCJAGRACZA = new Point(0, 0);
 
             GRACZ = new PictureBox();
             GRACZ.SizeMode = PictureBoxSizeMode.Zoom;
-            GRACZ.Size = new Size(ROZMIARKOMORKI/2, ROZMIARKOMORKI/3);
+            GRACZ.Size = new Size(ROZMIARKOMORKI / 2, ROZMIARKOMORKI / 3);
             GRACZ.Image = GRACZIMG;
 
 
@@ -38,10 +40,10 @@ namespace JaponskiLabirynt
             GRACZ.BackColor = Color.Transparent;
 
             //         [PRZES. MENU]     + [KOORD. GRACZ.] * [PRZESKOK CO KOM.] + [WYRÓWNANIE LABIRYNTU NA ŚRODEK W POZIOMIE]   
-            OFFSETX = japonskilabirynt.X + POZYCJAGRACZA.X * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - japonskilabirynt.SZEROKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Width/2;
+            OFFSETX = japonskilabirynt.X + POZYCJAGRACZA.X * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - SZEROKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Width / 2;
 
             //        [KOORD. GRACZ.] * [PRZESKOK CO KOM.] + [WYRÓWNANIE LABIRYNTU NA ŚRODEK W PIONIE]                                    + PRZESUNIECIE NA SRODEK KOMORKI
-            OFFSETY = POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - japonskilabirynt.WYSOKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Height;
+            OFFSETY = POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - WYSOKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Height;
             GRACZ.Location = new Point(OFFSETX, OFFSETY);
 
             MAIN.Paint += new System.Windows.Forms.PaintEventHandler(paint);
@@ -51,24 +53,24 @@ namespace JaponskiLabirynt
         {
             if (KIERUNEKGRACZA == "GORA" || KIERUNEKGRACZA == "DOL")
             {
-                OFFSETX = japonskilabirynt.X + POZYCJAGRACZA.X * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - japonskilabirynt.SZEROKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Width;
+                OFFSETX = japonskilabirynt.X + POZYCJAGRACZA.X * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - SZEROKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Width;
             }
             else
-                OFFSETX = japonskilabirynt.X + POZYCJAGRACZA.X * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - japonskilabirynt.SZEROKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Width / 2;
+                OFFSETX = japonskilabirynt.X + POZYCJAGRACZA.X * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - SZEROKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Width / 2;
 
             return OFFSETX;
         }
 
         private int liczgraczy()
         {
-            //OFFSETY = USTAWIENIA[1] + POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY / 2 - (ROZMIARKOMORKI * japonskilabirynt.SZEROKOSC) / 2) + ROZMIARKOMORKI / 2 - GRACZ.Height/ 2 - GRACZ.Height / 2;
+            //OFFSETY = USTAWIENIA[1] + POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY / 2 - (ROZMIARKOMORKI * SZEROKOSC) / 2) + ROZMIARKOMORKI / 2 - GRACZ.Height/ 2 - GRACZ.Height / 2;
 
             if (KIERUNEKGRACZA == "GORA" || KIERUNEKGRACZA == "DOL")
             {
-                OFFSETY = POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - japonskilabirynt.WYSOKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Height/2;
+                OFFSETY = POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - WYSOKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Height / 2;
             }
             else
-                OFFSETY = POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - japonskilabirynt.WYSOKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Height;
+                OFFSETY = POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - WYSOKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Height;
             return OFFSETY;
         }
 
@@ -153,7 +155,7 @@ namespace JaponskiLabirynt
 
         public void ruch(int x, int y)
         {
-            if (POZYCJAGRACZA.X != japonskilabirynt.SZEROKOSC)
+            if (POZYCJAGRACZA.X != SZEROKOSC)
             {
                 if (x == 1 && !GRID[POZYCJAGRACZA.Y, POZYCJAGRACZA.X].HasFlag(KIERUNEK.E))
                 {
@@ -186,6 +188,21 @@ namespace JaponskiLabirynt
             GRACZ.Location = new Point(liczgraczx(), liczgraczy());
             MAIN.Invalidate();
 
+        }
+
+        public void reset(int WYSOKOSC, int SZEROKOSC, int ROZMIARKOMORKI)
+        {
+            this.WYSOKOSC = WYSOKOSC;
+            this.SZEROKOSC = SZEROKOSC;
+            this.ROZMIARKOMORKI = ROZMIARKOMORKI;
+            POZYCJAGRACZA.X = 0;
+            POZYCJAGRACZA.Y = 0;
+            GRACZ.Size = new Size(ROZMIARKOMORKI / 2, ROZMIARKOMORKI / 3);
+            OFFSETY = POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - WYSOKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Height;
+            OFFSETX = japonskilabirynt.X + POZYCJAGRACZA.X * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - SZEROKOSC * ROZMIARKOMORKI) / 2 + GRACZ.Width / 2;
+            GRACZ.Location = new Point(OFFSETX, OFFSETY);
+            orientacja(3);
+            MAIN.Invalidate();
         }
 
         private void paint(object sender, PaintEventArgs e)

@@ -11,8 +11,8 @@ namespace JaponskiLabirynt
         public static int POLELABIRYNTUY = POLEOKNA_H;
 
         //ROZMIAR LABIRYNTU W KOMORKACH
-        public static int WYSOKOSC = 5;
-        public static int SZEROKOSC = 5;
+        private int WYSOKOSC = 5;
+        private int SZEROKOSC = 5;
 
         private bool GRA = false;
         private int ROZMIARKOMORKI;
@@ -26,8 +26,8 @@ namespace JaponskiLabirynt
             InitializeComponent();
             rozmiarlabiryntu();
             LABIRYNT = new labirynt(WYSOKOSC, SZEROKOSC);
-            RYSOWANIE = new rysowanie(LABIRYNT.GRID, ROZMIARKOMORKI, this);
-            GRACZ = new gracz(ROZMIARKOMORKI, LABIRYNT.GRID, this);
+            RYSOWANIE = new rysowanie(LABIRYNT.GRID, ROZMIARKOMORKI, WYSOKOSC, SZEROKOSC, this);
+            GRACZ = new gracz(ROZMIARKOMORKI, LABIRYNT.GRID, WYSOKOSC, SZEROKOSC, this);
             POLICJANT = new policja();
         }
 
@@ -37,7 +37,6 @@ namespace JaponskiLabirynt
             if (SZEROKOSC >= WYSOKOSC)
             {
                 ROZMIARKOMORKI = (POLEOKNA_W - X) / SZEROKOSC;
-
             }
             else
             {
@@ -54,6 +53,17 @@ namespace JaponskiLabirynt
         {
             textBox1.Visible = false;
             //button1.Visible = false;
+            
+            GRA = true;
+            Random rand = new Random();
+            SZEROKOSC = rand.Next(3,29);
+            WYSOKOSC = rand.Next(3, 29);
+
+            rozmiarlabiryntu();
+            LABIRYNT.SZEROKOSC = SZEROKOSC;
+            LABIRYNT.WYSOKOSC = WYSOKOSC;
+            RYSOWANIE.reset(WYSOKOSC, SZEROKOSC, ROZMIARKOMORKI);
+            GRACZ.reset(WYSOKOSC, SZEROKOSC, ROZMIARKOMORKI);
 
             label1.Top = 20;
             LABIRYNT.restart();

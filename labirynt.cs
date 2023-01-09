@@ -28,7 +28,7 @@ namespace JaponskiLabirynt
             this.WYSOKOSC = WYSOKOSC;
             this.SZEROKOSC = SZEROKOSC;
    
-            GRID = new KIERUNEK[WYSOKOSC, SZEROKOSC];
+            GRID = new KIERUNEK[30, 30];
             wypelnianie(GRID);
             Point START = znajdzstart(GRID);
             Point KONIEC = znajdzkoniec(GRID);
@@ -63,7 +63,7 @@ namespace JaponskiLabirynt
                 int NOWAKOLUMNA = KOLUMNA + kierunkiX[KIERUNEK];
                 int NOWYWIERSZ = WIERSZ + kierunkiY[KIERUNEK];
                 
-                if (NOWAKOLUMNA <= japonskilabirynt.SZEROKOSC - 1 
+                if (NOWAKOLUMNA <= SZEROKOSC - 1 
                     && NOWAKOLUMNA >= 0 && NOWYWIERSZ <= WYSOKOSC - 1 
                     && NOWYWIERSZ >= 0 
                     && GRID[NOWYWIERSZ, NOWAKOLUMNA] == WSZYSTKIEKIERUNKI)

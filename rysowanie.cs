@@ -14,7 +14,7 @@ namespace JaponskiLabirynt
     {
 
         public labirynt.KIERUNEK[,] GRID;
-        int ROZMIARKOMORKI;
+        public int ROZMIARKOMORKI;
 
         static public Image PROSTA = Image.FromFile("../../../pliki/1.png");
         static public Image ZAKRET = Image.FromFile("../../../pliki/2.png");
@@ -22,26 +22,35 @@ namespace JaponskiLabirynt
         static public Image SKRZYZOWANIE4 = Image.FromFile("../../../pliki/5.png");
         static public Image DEADEND = Image.FromFile("../../../pliki/4.png");
 
-        public rysowanie(labirynt.KIERUNEK[,] GRID, int ROZMIARKOMORKI, japonskilabirynt MAIN)
+        public int WYSOKOSC, SZEROKOSC;
+
+        public rysowanie(labirynt.KIERUNEK[,] GRID, int ROZMIARKOMORKI, int WYSOKOSC, int SZEROKOSC, japonskilabirynt MAIN)
         {
             this.GRID = GRID;
             this.ROZMIARKOMORKI = ROZMIARKOMORKI;
+            this.SZEROKOSC = SZEROKOSC;
+            this.WYSOKOSC = WYSOKOSC;
             MAIN.Paint += new PaintEventHandler(paintlabirynt);
         }
 
         public void paintlabirynt(object sender, PaintEventArgs e)
         {
             Graphics GRAFIKA = e.Graphics;
-
-            for (int KOLUMNA = 0; KOLUMNA < japonskilabirynt.WYSOKOSC; KOLUMNA++)
+            for (int KOLUMNA = 0; KOLUMNA < WYSOKOSC; KOLUMNA++)
             {
-                for (int WIERSZ = 0; WIERSZ < japonskilabirynt.SZEROKOSC; WIERSZ++)
+                for (int WIERSZ = 0; WIERSZ < SZEROKOSC; WIERSZ++)
                 {
                     rysujkomorke(GRID, KOLUMNA, WIERSZ, GRAFIKA);
                 }
             }
         }
 
+        public void reset(int WYSOKOSC, int SZEROKOSC, int ROZMIARKOMORKI)
+        {
+            this.WYSOKOSC = WYSOKOSC;
+            this.SZEROKOSC = SZEROKOSC;
+            this.ROZMIARKOMORKI = ROZMIARKOMORKI;
+        }
 
         private void rysujkomorke(labirynt.KIERUNEK[,] GRID, int KOLUMNA, int WIERSZ, Graphics GRAFIKA)
         {
@@ -55,10 +64,10 @@ namespace JaponskiLabirynt
                 SCIANA.StartCap = LineCap.Round;
 
                 //             [PRZES. MENU]     +      [KTORY WIERSZ]      +             [(CAŁE DOSTĘPNE POLE - SZEROKOSC LABIRYNTU) / 2]
-                int OFFSETX = japonskilabirynt.X + WIERSZ * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - japonskilabirynt.SZEROKOSC * ROZMIARKOMORKI) / 2;
+                int OFFSETX = japonskilabirynt.X + WIERSZ * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUX - SZEROKOSC * ROZMIARKOMORKI) / 2;
 
                 //             [KTORY WIERSZ]         +                   [(CAŁE DOSTĘPNE POLE - WYSOKOSC LABIRYNTU) / 2]
-                int OFFSETY = KOLUMNA * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - japonskilabirynt.WYSOKOSC*ROZMIARKOMORKI) / 2;
+                int OFFSETY = KOLUMNA * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY - WYSOKOSC * ROZMIARKOMORKI) / 2;
 
                 int ILOSCKIERUNKOW = ileflag((int)GRID[KOLUMNA, WIERSZ]);
 

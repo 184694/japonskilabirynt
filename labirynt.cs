@@ -22,6 +22,7 @@ namespace JaponskiLabirynt
 
         public int MAXROZMIAR = 30;
         public int WYSOKOSC, SZEROKOSC;
+        public int WJAZD;
         public KIERUNEK[,] GRID;
     
         public labirynt(int WYSOKOSC, int SZEROKOSC)
@@ -103,8 +104,28 @@ namespace JaponskiLabirynt
 
             wypelnianie(GRID);
             GRID = kret(GRID, 0, 0);
-            GRID[0, 0] &= ~KIERUNEK.W;
-            GRID[WYSOKOSC - 1, SZEROKOSC - 1] &= ~KIERUNEK.E;
+            WJAZD = random(0, WYSOKOSC);
+            GRID[WJAZD, 0] &= ~KIERUNEK.W;
+
+            switch (random(1, 4))
+            {
+                case 1:
+                    GRID[0, SZEROKOSC - random(1,SZEROKOSC)] &= ~KIERUNEK.N;
+                    break;
+                case 2:
+                    GRID[WYSOKOSC - random(1, WYSOKOSC), SZEROKOSC - 1] &= ~KIERUNEK.E;
+                    break;
+                case 3:
+                    GRID[WYSOKOSC - 1, SZEROKOSC - random(1, SZEROKOSC)] &= ~KIERUNEK.S;
+                    break;
+            }
+        }
+
+        private int random(int min, int max)
+        {
+            Random RANDOM = new Random();
+            int LICZBALOSOWA = RANDOM.Next(min, max);
+            return LICZBALOSOWA;
         }
     }
 }

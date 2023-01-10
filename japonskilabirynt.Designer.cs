@@ -44,6 +44,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -254,6 +255,15 @@
             this.pictureBox5.TabStop = false;
             this.pictureBox5.Visible = false;
             // 
+            // label8
+            // 
+            this.label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label8.Location = new System.Drawing.Point(386, 151);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(539, 542);
+            this.label8.TabIndex = 17;
+            this.label8.Visible = false;
+            // 
             // japonskilabirynt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -276,6 +286,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.label8);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.KeyPreview = true;
@@ -310,5 +321,6 @@
         private Label label7;
         private Button button3;
         private PictureBox pictureBox5;
+        private Label label8;
     }
 }

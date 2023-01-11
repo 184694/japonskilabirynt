@@ -8,21 +8,59 @@ using static JaponskiLabirynt.labirynt;
 namespace JaponskiLabirynt
 {
 
-    internal class auto
+    public class auto
     {
+        /// <summary>
+        /// Ruchy auta
+        /// </summary>
         public List<KIERUNEK> RUCHY = new List<KIERUNEK>();
+
+        /// <summary>
+        /// Uzywane tylko dla gracza, czy zwyciezyl
+        /// </summary>
         public bool ZWYCIESTWO = false;
+
+        /// <summary>
+        /// Pozycja XY auta
+        /// </summary>
         public int OFFSETX, OFFSETY;
+
+        /// <summary>
+        /// Potrzebne do policzenia pozycji auta
+        /// </summary>
         public int ROZMIARKOMORKI;
+
+        /// <summary>
+        /// Informacje o scianach labiryntu
+        /// </summary>
         private KIERUNEK[,] GRID;
+
         private japonskilabirynt MAIN;
         public PictureBox AUTO;
         public Point POZYCJAGRACZA;
+
+        /// <summary>
+        /// Okresla w ktora strone obrocony jest gracz
+        /// </summary>
         private string KIERUNEKGRACZA;
+
+        /// <summary>
+        /// Wymiary labiryntu
+        /// </summary>
         private int WYSOKOSC, SZEROKOSC;
         static public Image GRACZIMG = Image.FromFile("../../../pliki/car.png");
         static public Image POLICJANTIMG = Image.FromFile("../../../pliki/police.png");
 
+        /// <summary>
+        /// Poruszanie sie aut, obrot aut, reset pozycji aut
+        /// </summary>
+        /// <param name="ROZMIARKOMORKI">Rozmiar komorki labiryntu</param>
+        /// <param name="GRID">Tablica z labiryntem</param>
+        /// <param name="WJAZD">Wjazd do labiryntu</param>
+        /// <param name="WYSOKOSC">Wysokosc labiryntu</param>
+        /// <param name="SZEROKOSC">Szerokosc labiryntu</param>
+        /// <param name="WYBORPOJAZDU">Wybor pojazdu (gracz,policjant)</param>
+        /// <param name="MAIN"></param>
         public auto(int ROZMIARKOMORKI, KIERUNEK[,] GRID, int WJAZD, int WYSOKOSC, int SZEROKOSC, string WYBORPOJAZDU, japonskilabirynt MAIN)
         {
             this.ROZMIARKOMORKI = ROZMIARKOMORKI;
@@ -53,6 +91,10 @@ namespace JaponskiLabirynt
             MAIN.Paint += new System.Windows.Forms.PaintEventHandler(paint);
         }
 
+        /// <summary>
+        /// Pozycja gracza Y na ekranie
+        /// </summary>
+        /// <returns></returns>
         private int liczgraczx()
         {
             if (KIERUNEKGRACZA == "GORA" || KIERUNEKGRACZA == "DOL")
@@ -65,6 +107,10 @@ namespace JaponskiLabirynt
             return OFFSETX;
         }
 
+        /// <summary>
+        /// Pozycja auta Y na ekranie
+        /// </summary>
+        /// <returns></returns>
         private int liczgraczy()
         {
             //OFFSETY = USTAWIENIA[1] + POZYCJAGRACZA.Y * ROZMIARKOMORKI + (japonskilabirynt.POLELABIRYNTUY / 2 - (ROZMIARKOMORKI * SZEROKOSC) / 2) + ROZMIARKOMORKI / 2 - GRACZ.Height/ 2 - GRACZ.Height / 2;
@@ -78,6 +124,10 @@ namespace JaponskiLabirynt
             return OFFSETY;
         }
 
+        /// <summary>
+        /// Obracanie autem zaleznie od ostatniego ruchu
+        /// </summary>
+        /// <param name="kierunek"></param>
         public void orientacja(int kierunek)
         {
             switch (kierunek)
@@ -156,7 +206,12 @@ namespace JaponskiLabirynt
                     break;
             }
         }
-
+    
+        /// <summary>
+        /// Warunek wygranej, poruszanie autem - sprawdza czy jest sciana, jezeli nie to wykonuje ruch
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void ruch(int x, int y)
         {
 
@@ -212,6 +267,13 @@ namespace JaponskiLabirynt
 
         }
 
+        /// <summary>
+        /// Resetuje pozycje, orientacje, rozmiar auta
+        /// </summary>
+        /// <param name="WJAZD">Wjazd do labiryntu</param>
+        /// <param name="WYSOKOSC">Wysokosc labiryntu</param>
+        /// <param name="SZEROKOSC">Szerokosc labiryntu</param>
+        /// <param name="ROZMIARKOMORKI">Rozmiar komorki labiryntu</param>
         public void reset(int WJAZD, int WYSOKOSC, int SZEROKOSC, int ROZMIARKOMORKI)
         {
             this.WYSOKOSC = WYSOKOSC;

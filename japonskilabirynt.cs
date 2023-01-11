@@ -6,31 +6,68 @@ namespace JaponskiLabirynt
 {
     public partial class japonskilabirynt : Form
     {
-        //POZYCJA LABIRYNTU [311 BO TO SZEROKOSC MENU]
+        /// <summary>
+        /// Przesuniecie labiryntu o szerokosc menu
+        /// </summary>
         public static int X = 311;
 
         public static int POLEOKNA_W = 1024;
         public static int POLEOKNA_H = 768;
+        
+        /// <summary>
+        /// Pozycja lewego gornego rogu labiryntu
+        /// </summary>
         public static int POLELABIRYNTUX = POLEOKNA_W - X;
+        /// <summary>
+        /// Pozycja lewego gornego rogu labiryntu
+        /// </summary>
         public static int POLELABIRYNTUY = POLEOKNA_H;
 
         private string[] ciekawostki = System.IO.File.ReadAllLines("../../../pliki/ciekawostki.txt");
         private int numerciekawostki = 0;
+        /// <summary>
+        /// Ilosc zaladowanych ciekawostek
+        /// </summary>
         private int iloscciekawostek;
 
+        /// <summary>
+        /// Zegarek gry do liczenia punktow, im szybciej gracz przejdzie poziom tym wiecej punktow dostanie
+        /// </summary>
         Stopwatch stopwatch;
         private string NAZWAGRACZA = "GRACZ 1";
         private int ZYCIA = 3;
         private int POZIOM = 1;
 
+        /// <summary>
+        /// [WA¯NE!] Okresla przedzial w ktorym bedzie generowany rozmiar losowego labirynt, jest to gorna granica
+        /// </summary>
         private int ROZMIARLABIRYNTU = 4;
-        //ROZMIAR LABIRYNTU W KOMORKACH
+
+        /// <summary>
+        /// Wysokosc labiryntu podana w komorkach
+        /// </summary>
         private int WYSOKOSC = 2;
+
+        /// <summary>
+        /// Szerokosc labiryntu podana w komorkach
+        /// </summary>
         private int SZEROKOSC = 2;
 
         private int PUNKTY = 0;
+
+        /// <summary>
+        /// Wzor na BONUS = 5000 - (int)stopwatch.Elapsed.TotalSeconds * 100;
+        /// </summary>
         private int BONUS = 0;
+
+        /// <summary>
+        /// Zlicza wykonane ruchy gracza
+        /// </summary>
         private int RUCHY = 0;
+
+        /// <summary>
+        /// Sprawdza czy rozgrywka jest w toku
+        /// </summary>
         private bool GRA = false;
 
         private int ROZMIARKOMORKI;
@@ -52,9 +89,11 @@ namespace JaponskiLabirynt
             iloscciekawostek = ciekawostki.Length;
         }
 
+        /// <summary>
+        /// Ustawia ROZMIARKOMORKI na taki, aby labirynt zmiescil sie w oknie
+        /// </summary>
         public void rozmiarkomorkilabiryntu()
         {
-            //USTAWIANIE SZEROKOSCI LABIRYNTU DYNAMICZNIE DO ROZMIARU OKNA ABY GO ZMIEŒCIÆ
             if (SZEROKOSC >= WYSOKOSC)
             {
                 ROZMIARKOMORKI = (POLEOKNA_W - X) / SZEROKOSC;
@@ -65,6 +104,11 @@ namespace JaponskiLabirynt
             }
         }
 
+        /// <summary>
+        /// Startuje gre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             textBox1.Visible = false;
@@ -90,13 +134,15 @@ namespace JaponskiLabirynt
             Application.Exit();
         }
 
+        /// <summary>
+        /// Poruszanie sie autem gracza + poruszanie sie policja + warunek wygranej + warunek przegranej
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void japonskilabirynt_KeyPress(object sender, KeyPressEventArgs e)
         {
 
             if (GRA == true) {
-                
-                
-                
                 
                 if (e.KeyChar == 'a' || e.KeyChar == 'A')
                 {
@@ -174,6 +220,9 @@ namespace JaponskiLabirynt
 
         }
 
+        /// <summary>
+        /// Poruszanie sie policji po sladach gracza
+        /// </summary>
         private void ruchpolicji()
         {
             if (GRACZ.RUCHY.Count != 0)
@@ -204,6 +253,9 @@ namespace JaponskiLabirynt
             Invalidate();
         }
 
+        /// <summary>
+        /// Zatrzymuje czas i gre
+        /// </summary>
         private void startstopgra()
         {
             if (GRA == true)
@@ -218,6 +270,9 @@ namespace JaponskiLabirynt
             }
         }
 
+        /// <summary>
+        /// Resetuje pozycje gracza, policjanta, tworzy nowy labirynt
+        /// </summary>
         private void resetplanszy()
         {
             
@@ -240,6 +295,9 @@ namespace JaponskiLabirynt
             Invalidate();
         }
 
+        /// <summary>
+        /// Przechodzi do nastepnego labiryntu i dodaje punkty graczowi, resetuje zegarek bonusu i ustawia nowe wartosci, koncowo pokazuje ciekawostke co 6 poziom i resetuje status skonczenia poziomu
+        /// </summary>
         private void nastepnylabirynt()
         {
             resetplanszy();
@@ -254,13 +312,16 @@ namespace JaponskiLabirynt
             POZIOM += 1;
             label5.Text = "PUNKTY: " + PUNKTY;
             label4.Text = "POZIOM: " + POZIOM;
-            if (POZIOM % 6 == 0 && numerciekawostki <= iloscciekawostek)
+            if (POZIOM % 4 == 0 && numerciekawostki <= iloscciekawostek)
             {
                 ciekawostka();
             }
             GRACZ.ZWYCIESTWO = false;
         }
 
+        /// <summary>
+        /// Jezeli gracz osiagnie 0 zyc konczy gre
+        /// </summary>
         private void gameover()
         {
             startstopgra();
@@ -270,6 +331,9 @@ namespace JaponskiLabirynt
             button3.Visible = true;
         }
 
+        /// <summary>
+        /// Wyswietla ciekawostki
+        /// </summary>
         private void ciekawostka()
         {
             startstopgra();
@@ -288,6 +352,11 @@ namespace JaponskiLabirynt
             button3.Visible = true;
         }
 
+        /// <summary>
+        /// Chowa ciekawostki i komunikat przegranej
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button3_Click(object sender, EventArgs e)
         {
             pictureBox5.Visible = false;
@@ -301,6 +370,10 @@ namespace JaponskiLabirynt
             }
             startstopgra();
         }
+
+        /// <summary>
+        /// Resetuje gracza, poziom i plansze
+        /// </summary>
         private void restartgry()
         {
             resetplanszy();
@@ -316,6 +389,10 @@ namespace JaponskiLabirynt
             pictureBox3.Visible = true;
             pictureBox4.Visible = true;
         }
+        
+        /// <summary>
+        /// Chowa menu gracza
+        /// </summary>
         private void ukryjpokazgracza()
         {
             if (label2.Visible == true)

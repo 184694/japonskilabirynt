@@ -10,10 +10,17 @@ using System.Threading.Tasks;
 
 namespace JaponskiLabirynt
 {
-    internal class rysowanie
+    public class rysowanie
     {
 
+        /// <summary>
+        /// Sciany labiryntu
+        /// </summary>
         public labirynt.KIERUNEK[,] GRID;
+        
+        /// <summary>
+        /// Rozmiar komorki labiryntu
+        /// </summary>
         public int ROZMIARKOMORKI;
 
         static public Image PROSTA = Image.FromFile("../../../pliki/1.png");
@@ -22,8 +29,19 @@ namespace JaponskiLabirynt
         static public Image SKRZYZOWANIE4 = Image.FromFile("../../../pliki/5.png");
         static public Image DEADEND = Image.FromFile("../../../pliki/4.png");
 
+        /// <summary>
+        /// Wymiary labiryntu
+        /// </summary>
         public int WYSOKOSC, SZEROKOSC;
 
+        /// <summary>
+        /// Rysuje labirynt na ekranie
+        /// </summary>
+        /// <param name="GRID">Sciany labiryntu</param>
+        /// <param name="ROZMIARKOMORKI">Rozmiar komorki labiryntu</param>
+        /// <param name="WYSOKOSC">Wysokosc komorki labiryntu</param>
+        /// <param name="SZEROKOSC">Szerokosc komorki labiyrntu</param>
+        /// <param name="MAIN"></param>
         public rysowanie(labirynt.KIERUNEK[,] GRID, int ROZMIARKOMORKI, int WYSOKOSC, int SZEROKOSC, japonskilabirynt MAIN)
         {
             this.GRID = GRID;
@@ -45,6 +63,12 @@ namespace JaponskiLabirynt
             }
         }
 
+        /// <summary>
+        /// Przypisuje nowe wartosci rozmiaru labiryntu
+        /// </summary>
+        /// <param name="WYSOKOSC">Wysokosc labiryntu</param>
+        /// <param name="SZEROKOSC">Szerokosc labiryntu</param>
+        /// <param name="ROZMIARKOMORKI">Rozmiar komorki labiryntu</param>
         public void reset(int WYSOKOSC, int SZEROKOSC, int ROZMIARKOMORKI)
         {
             this.WYSOKOSC = WYSOKOSC;
@@ -52,6 +76,13 @@ namespace JaponskiLabirynt
             this.ROZMIARKOMORKI = ROZMIARKOMORKI;
         }
 
+        /// <summary>
+        /// Rysowanie pojedynczej komorki, wybiera teksture drogi zaleznie od ilosci scian wokol niej
+        /// </summary>
+        /// <param name="GRID">Sciany labiryntu</param>
+        /// <param name="KOLUMNA">Ktora kolumna</param>
+        /// <param name="WIERSZ">Ktory wiersz</param>
+        /// <param name="GRAFIKA"></param>
         private void rysujkomorke(labirynt.KIERUNEK[,] GRID, int KOLUMNA, int WIERSZ, Graphics GRAFIKA)
         {
 
@@ -209,7 +240,6 @@ namespace JaponskiLabirynt
                 Font FONT = new Font("Arial", 16);
                 //GRAFIKA.DrawString(ILOSCKIERUNKOW.ToString(), FONT, KOMORKA, OFFSETX + ROZMIARKOMORKI/2, OFFSETY + ROZMIARKOMORKI/2-16);
 
-
                 /* RYSOWANIE SCIAN LABIRYNTU
                 if (warunekkierunku(GRID[KOLUMNA, WIERSZ], labirynt.KIERUNEK.N))
                     GRAFIKA.DrawLine(SCIANA, new PointF(OFFSETX, OFFSETY), new PointF(OFFSETX + ROZMIARKOMORKI, OFFSETY));
@@ -226,7 +256,11 @@ namespace JaponskiLabirynt
             }
         }
 
-
+        /// <summary>
+        /// Sprawdza flagi aby okreslic ilosc scian zeby wybrac teksture
+        /// </summary>
+        /// <param name="KOMORKA"></param>
+        /// <returns></returns>
         public static int ileflag(long KOMORKA)
         {
             int LICZNIK = 0;
@@ -240,6 +274,12 @@ namespace JaponskiLabirynt
             return LICZNIK;
         }
 
+        /// <summary>
+        /// Tworzy syntax bardziej czytelnym w kodzie
+        /// </summary>
+        /// <param name="GRID">Sciany labiryntu</param>
+        /// <param name="KIERUNEK">Ktory kierunek</param>
+        /// <returns></returns>
         private static bool warunekkierunku(labirynt.KIERUNEK GRID, labirynt.KIERUNEK KIERUNEK)
         {
             if (GRID.HasFlag(KIERUNEK))

@@ -8,9 +8,12 @@ using static JaponskiLabirynt.labirynt;
 namespace JaponskiLabirynt
 {
 
-    internal class labirynt
+    public class labirynt
     {
 
+        /// <summary>
+        /// Okreslaja kierunek rozbicia sciany labiryntu lub w ktorym kierunku poruszylo sie auto
+        /// </summary>
         [Flags]
         public enum KIERUNEK
         {
@@ -20,11 +23,23 @@ namespace JaponskiLabirynt
             E = 1 << 3
         }
 
+        /// <summary>
+        /// Maksymalny rozmiar labiryntu
+        /// </summary>
         public int MAXROZMIAR = 30;
         public int WYSOKOSC, SZEROKOSC;
         public int WJAZD;
+        
+        /// <summary>
+        /// Tablica zawierajaca labirynt
+        /// </summary>
         public KIERUNEK[,] GRID;
     
+        /// <summary>
+        /// Deklaracja nowego labiryntu
+        /// </summary>
+        /// <param name="WYSOKOSC">wys. labiryntu</param>
+        /// <param name="SZEROKOSC">szer. labiryntu</param>
         public labirynt(int WYSOKOSC, int SZEROKOSC)
         {
             this.WYSOKOSC = WYSOKOSC;
@@ -34,6 +49,10 @@ namespace JaponskiLabirynt
             reset(WYSOKOSC, SZEROKOSC);
         }
 
+        /// <summary>
+        /// Zapelnia labirynt scianami
+        /// </summary>
+        /// <param name="GRID"></param>
         public void wypelnianie(KIERUNEK[,] GRID)
         {
             for (int i = 0; i < WYSOKOSC; i++)
@@ -46,6 +65,14 @@ namespace JaponskiLabirynt
 
         }
 
+        /// <summary>
+        /// "wykopuje" sciany zaczynajac od punktu (0,0) po czym przesuwa sie losowo wedlug podanych kierunkow, a nastepnie cofa sie aby sprawdzic
+        /// czy nie zostala jakas komorka do ktorej nie da sie wejsc. Jest to Backtracking algorithm.
+        /// </summary>
+        /// <param name="GRID"></param>
+        /// <param name="KOLUMNA"></param>
+        /// <param name="WIERSZ"></param>
+        /// <returns></returns>
         public KIERUNEK[,] kret(KIERUNEK[,] GRID, int KOLUMNA, int WIERSZ)
         {
             Random LOSOWA = new Random();
@@ -72,7 +99,14 @@ namespace JaponskiLabirynt
             return GRID;
         }
 
+        /// <summary>
+        /// Ustawianie scian
+        /// </summary>
         public const KIERUNEK WSZYSTKIEKIERUNKI = KIERUNEK.E | KIERUNEK.S | KIERUNEK.W | KIERUNEK.N;
+
+        /// <summary>
+        /// Kierunki poruszania sie po tablicy w lewo i prawo
+        /// </summary>
         readonly Dictionary<KIERUNEK, int> kierunkiX = new Dictionary<KIERUNEK, int>()
         {
             { KIERUNEK.E,  1},
@@ -81,6 +115,9 @@ namespace JaponskiLabirynt
             { KIERUNEK.S,  0}
         };
 
+        /// <summary>
+        /// Kierunki poruszania sie po tablicy w gore i w dol
+        /// </summary>
         readonly Dictionary<KIERUNEK, int> kierunkiY = new Dictionary<KIERUNEK, int>()
         {
             { KIERUNEK.E,  0},
@@ -89,6 +126,9 @@ namespace JaponskiLabirynt
             { KIERUNEK.S,  1}
         };
 
+        /// <summary>
+        /// Kierunki poruszania sie po tablicy xy na odwrót
+        /// </summary>
         readonly Dictionary<KIERUNEK, KIERUNEK> naopak = new Dictionary<KIERUNEK, KIERUNEK>()
         {
             { KIERUNEK.E, KIERUNEK.W},
@@ -97,6 +137,11 @@ namespace JaponskiLabirynt
             { KIERUNEK.S, KIERUNEK.N}
         };
 
+        /// <summary>
+        /// Wypelnienie labiryntu wszystkimi scianami, wykopanie kretem, otworzenie wjazu i wyjazdu
+        /// </summary>
+        /// <param name="WYSOKOSC"></param>
+        /// <param name="SZEROKOSC"></param>
         public void reset(int WYSOKOSC, int SZEROKOSC)
         {
             this.WYSOKOSC = WYSOKOSC;

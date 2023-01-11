@@ -221,9 +221,9 @@
             // 
             this.label7.BackColor = System.Drawing.Color.WhiteSmoke;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label7.Location = new System.Drawing.Point(400, 384);
+            this.label7.Location = new System.Drawing.Point(343, 303);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(515, 227);
+            this.label7.Size = new System.Drawing.Size(645, 359);
             this.label7.TabIndex = 14;
             this.label7.Text = "Ciekawostki";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -234,7 +234,7 @@
             this.button3.BackColor = System.Drawing.Color.Maroon;
             this.button3.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.button3.Location = new System.Drawing.Point(400, 614);
+            this.button3.Location = new System.Drawing.Point(403, 674);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(515, 67);
             this.button3.TabIndex = 15;
@@ -247,9 +247,9 @@
             // 
             this.pictureBox5.BackColor = System.Drawing.Color.White;
             this.pictureBox5.Image = global::JaponskiLabirynt.Properties.Resources.car;
-            this.pictureBox5.Location = new System.Drawing.Point(400, 164);
+            this.pictureBox5.Location = new System.Drawing.Point(343, 22);
             this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(515, 217);
+            this.pictureBox5.Size = new System.Drawing.Size(645, 278);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox5.TabIndex = 16;
             this.pictureBox5.TabStop = false;
@@ -258,9 +258,9 @@
             // label8
             // 
             this.label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label8.Location = new System.Drawing.Point(386, 151);
+            this.label8.Location = new System.Drawing.Point(331, 9);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(539, 542);
+            this.label8.Size = new System.Drawing.Size(669, 747);
             this.label8.TabIndex = 17;
             this.label8.Visible = false;
             // 
